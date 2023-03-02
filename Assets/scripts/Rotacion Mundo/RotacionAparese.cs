@@ -4,16 +4,18 @@ using UnityEngine;
 
 public class RotacionAparese : MonoBehaviour
 {
+    public ParticleSystem Cuadrito;
     private float timer = 0f;
     private bool isRotating = false;
     private Quaternion targetRotation;
-    public float _rotationSpeed = 5;
+    public float _rotationSpeed = 5f;
     public Vector3 blanco;
     public float tiempoDeGirar = 0.2f;
 
     private void Start()
     {
-        blanco = new Vector3(-90f, 0f, 0f);
+        Cuadrito.Stop();
+       
     }
 
     // Update is called once per frame
@@ -21,11 +23,12 @@ public class RotacionAparese : MonoBehaviour
     {
         if (isRotating)
         {
-            
+            Cuadrito.Play();
             // Rotating the object in the Y axis by -90 degrees using Quaternion.Euler()
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(blanco), _rotationSpeed);
             if (transform.rotation == Quaternion.Euler(blanco))
             {
+                Cuadrito.Stop();
                 isRotating = false;
             }
         }
