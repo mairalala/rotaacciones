@@ -6,15 +6,16 @@ using UnityEngine;
 
 public class color : MonoBehaviour
 {
-    private bool esColor = false;
+    private bool CausaDaño = false;
     private Renderer colorCubo;
+    [SerializeField] int _daño;
     public GameObject Player;
 
     private void Start()
     {
         colorCubo = GetComponent<Renderer>();
         colorCubo.material.SetColor("_Color", Color.red);
-        esColor = true;
+        CausaDaño = true;
     }
     private void Update()
     {
@@ -26,17 +27,29 @@ public class color : MonoBehaviour
 
     private void cambiamosColor()
     {
-        if (esColor== true)
+        if (CausaDaño == true)
         {
-            colorCubo.material.SetColor("_Color", Color.red);
-            esColor = false;
-            Player.GetComponent<daño>();
+            colorCubo.material.SetColor("_Color", Color.blue);
+            CausaDaño = false;
+            
         }
         else
         {
-            colorCubo.material.SetColor("_Color", Color.blue);
-            esColor = true;
+            colorCubo.material.SetColor("_Color", Color.red);
+            CausaDaño = true;
 
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player" && CausaDaño)
+        {
+            Player.GetComponent<datosPlayer>().vidaPlayer -= _daño;
+        }
+
+        if (other.tag == "Enemigo")
+        {
+            Debug.Log("esto es un enemigo");
         }
     }
 }

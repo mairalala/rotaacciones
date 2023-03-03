@@ -17,9 +17,10 @@ public class datosPlayer : MonoBehaviour
     void Update()
     {
         vidaVisual.GetComponent<Slider>().value = vidaPlayer;
-        if (vidaPlayer<0)
+        if (vidaPlayer < 0)
         {
             Debug.Log("has perdido");
+            this.gameObject.SetActive(false);
         }
     }
 }
