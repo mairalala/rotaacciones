@@ -81,7 +81,7 @@ public class ManagerPlaye : MonoBehaviour
         {
             for (int i = 0; i < objetosColisionados.Length; i++)
             {
-                objetosColisionados[i].GetComponent<Plataform>().Destruir();
+                //objetosColisionados[i].GetComponent<Plataform>().Destruir();
             }
         }
 
