@@ -6,19 +6,30 @@ using System;
 
 public class ManagerPlaye : MonoBehaviour
 {
+
+    public ParticleSystem Estalla;
     public int contadorBombaTNTInicial = 0;
     public int contadorBombaTNT = 0;
-    //public int contadorBombaNitroInicial = 0;
-    //public int contadorBombaNitro = 0;
     public GameObject objectOne;
     public GameObject objectTwo;
     public GameObject objectThree;
     private Color colorOriginal;
     public bool BOM = false;
+    //public bool TocaSuelo = false;
+    [SerializeField] private Vector3[] _rotationsAnimations;
+    [SerializeField] private Transform centroBomba;
+    [SerializeField] private float radioBomba;
+    [SerializeField] private LayerMask capaParedes;
+    [SerializeField] private LayerMask capaPiso;
+    public int posActualPie;
 
-    [SerializeField] Transform centroBomba;
-    [SerializeField] float radioBomba;
-    [SerializeField] LayerMask capaParedes;
+    [SerializeField] public Collider[] pies;
+
+    [SerializeField] bool _tocandoSuelo;
+    [SerializeField] LayerMask _capasPiso;
+
+    public bool TocandoSuelo { get => _tocandoSuelo; set => _tocandoSuelo = value; }
+
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -27,36 +38,68 @@ public class ManagerPlaye : MonoBehaviour
             AumentarBombaTNT();
         }
     }
-    void Update()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R) && contadorBombaTNT >= 1) 
-        
+        if (Input.GetKeyDown(KeyCode.R) && contadorBombaTNT >= 1)
         {
             DisminuirBombaTNT();
             Debug.Log("LoHaceCorrutina");
             StartCoroutine(BomTnt());
         }
     }
-    void Start()
+    //if (Input.GetKeyDown(KeyCode.D))
+    //{
+    //    posicionActualPie++;
+    //    if (posicionActualPie >= pies.Length)
+    //    {
+    //        posicionActualPie = 0;
+    //    }
+    //for (int i = 0; i < pies.Length; i++)
+    //{
+    //    if (i == posicionActualPie)
+    //    {
+    //        pies[i].SetActive(true);
+    //    }
+    //    else
+    //    {
+    //        pies[i].SetActive(false);
+    //    }
+    //}
+    //    }
+    //    if (Input.GetKeyDown(KeyCode.A))
+    //    {
+    //        posicionActualPie--;
+    //        if (posicionActualPie < 0)
+    //        {
+    //            posicionActualPie = pies.Length - 1;
+    //        }
+    //        for (int i = 0; i < pies.Length; i++)
+    //        {
+    //            if (i == posicionActualPie)
+    //            {
+    //                pies[i].SetActive(true);
+    //            }
+    //            else
+    //            {
+    //                pies[i].SetActive(false);
+    //            }
+    //        }
+    //    }
+    //}
+    private void Start()
     {
         contadorBombaTNT = contadorBombaTNTInicial;
-        //GameObject carasNegras = transform.Find("carasnegras").gameObject;
-        //MeshRenderer[] meshRenderers = carasNegras.GetComponentsInChildren<MeshRenderer>()
-        //                                         .Where(mr => mr.gameObject.name != "Centro")
-        //                                         .ToArray();
-        //colorOriginal = meshRenderers[0].materials[0].color;
+        colorOriginal = GetComponentInChildren<MeshRenderer>().materials[0].color;
+
+        ActivarPies(0);
     }
-    //MeshRenderer[] meshRendere
+
     public IEnumerator BomTnt()
     {
-        //BOM = false;
-        // BOM = true;
-        // meshRenderers.ToList().ForEach(mr => mr.materials[1].color = Color.yellow);
         yield return new WaitForSeconds(0.1f);
         objectThree.SetActive(true);
         yield return new WaitForSeconds(1.6f);
         objectThree.SetActive(false);
-        //meshRenderers.ToList().ForEach(mr => mr.materials[1].color = new Color(1f, 0.5f, 0f));
         yield return new WaitForSeconds(0.2f);
 
         objectTwo.SetActive(true);
@@ -65,13 +108,12 @@ public class ManagerPlaye : MonoBehaviour
         objectTwo.SetActive(false);
         objectOne.SetActive(true);
 
-        //meshRenderers.ToList().ForEach(mr => mr.materials[1].color = Color.yellow);
         yield return new WaitForSeconds(1.1f);
-        //meshRenderers.ToList().ForEach(mr => mr.materials[1].color = colorOriginal);
         objectOne.SetActive(false);
 
         Explosion();
     }
+
 
     public void Explosion()
     {
@@ -81,10 +123,9 @@ public class ManagerPlaye : MonoBehaviour
         {
             for (int i = 0; i < objetosColisionados.Length; i++)
             {
-                //objetosColisionados[i].GetComponent<Plataform>().Destruir();
+                objetosColisionados[i].GetComponent<Plataform>().Destruir();
             }
         }
-
         else
         {
             Debug.Log("No detecte nada");
@@ -95,19 +136,109 @@ public class ManagerPlaye : MonoBehaviour
         if (contadorBombaTNT >= 1)
         {
             contadorBombaTNT--;
-          
         }
     }
 
     public void AumentarBombaTNT()
     {
         contadorBombaTNT++;
-        
+
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.blue;
+        Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(centroBomba.position, radioBomba);
+
+        //void DrawGizmoFrente()
+        //{
+        //    Gizmos.color = Color.yellow;
+        //    Gizmos.DrawWireCube(FrentecontroladorSuelo.position, FrentedimensionesCaja);
+        //}
+
+        //void DrawGizmoArriba()
+        //{
+        //    Gizmos.color = Color.yellow;
+        //    Gizmos.DrawWireCube(ArribacontroladorSuelo.position, ArribadimensionesCaja);
+        //}
+
+        //void DrawGizmoAtras()
+        //{
+        //    Gizmos.color = Color.yellow;
+        //    Gizmos.DrawWireCube(AtrascontroladorSuelo.position, AtrasdimensionesCaja);
+        //}
+
+    }
+
+    public void ActivarPies(int currentRotation)
+    {
+        for (int i = 0; i < pies.Length; i++)
+        {
+            if (i == currentRotation)
+            {
+                pies[i].enabled = true;
+            }
+
+            else
+            {
+                pies[i].enabled = false;
+            }
+        }
+    }
+    public void DisminuirPosicion()
+    {
+        Debug.Log("rotonumeros");
+        posActualPie--;
+        if (posActualPie <= -1)
+        {
+            {
+
+                posActualPie = 3;
+            }
+        }
+    }
+    public void AumentarPosicion()
+    {
+        Debug.Log("rotonumeros");
+        posActualPie++;
+        if (posActualPie > _rotationsAnimations.Length)
+        {
+            posActualPie = 0;
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject)
+        {
+            Debug.Log(other.gameObject.layer);
+
+            if (other.gameObject.layer == _capasPiso)
+            {
+                _tocandoSuelo = true;
+            }
+        }
+
+        else
+        {
+            _tocandoSuelo = false;
+        }
+    }
+    public void Rotaranimaciones()
+    {
+        //Debug.Log("rotonumeros");
+        //Vector3 newRotation = _rotationsAnimations[posActualPie]; // Obtenemos los ángulos de euler de la rotación deseada
+        //objectOne.transform.rotation = Quaternion.Euler(new Vector3(newRotation.x, newRotation.y, objectOne.transform.rotation.eulerAngles.z));
+        //objectTwo.transform.rotation = Quaternion.Euler(new Vector3(newRotation.x, newRotation.y, objectTwo.transform.rotation.eulerAngles.z));
+        //objectThree.transform.rotation = Quaternion.Euler(new Vector3(newRotation.x, newRotation.y, objectThree.transform.rotation.eulerAngles.z));
     }
 }
+
+
+
+
+
+
+
+
+

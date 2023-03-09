@@ -1,6 +1,6 @@
 using System.Collections;
-using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine;
 
 public class SceneController : MonoBehaviour
 {
@@ -24,11 +24,10 @@ public class SceneController : MonoBehaviour
 
 
     }
-    // Update is called once per frame
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
 
-        if (collision.gameObject.tag == "Player")
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
         {
             int nextScene = SceneManager.GetActiveScene().buildIndex + 1;
             SceneManager.LoadScene(nextScene);

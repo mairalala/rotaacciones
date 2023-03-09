@@ -141,10 +141,10 @@ public class RecolecionItemn : MonoBehaviour
     //}
 
 
-    /*public IEnumerator EsperarYLlamarActivarParticula(Plataform plataforma)
+    public IEnumerator EsperarYLlamarActivarParticula(Plataform plataforma)
     {
         yield return new WaitForSeconds(tiempoEsperaParticula);
 
         plataforma.Destruir();
-    }*/
+    }
 }
